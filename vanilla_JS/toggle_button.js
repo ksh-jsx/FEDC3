@@ -88,40 +88,47 @@ function TimerButton({ $target, text, timer = 3000 }) {
   });
 }
 
-const button1 = new ToggleButton({
-  $target: $main,
-  text: "Button4",
-  onClick: (clickCount) => {
-    if (clickCount % 3 === 0) {
-      alert("3번째 클릭");
+function ButtonGroup({ $target, buttons }) {
+  const $group = document.createElement("div");
+  let isInit = false;
+
+  this.render = () => {
+    if (!isInit) {
+      buttons.forEach(({ type, ...props }) => {
+        if (type === "toggle") {
+          new ToggleButton({ $target: $group, ...props });
+        } else if (type === "timer") {
+          new TimerButton({ $target: $group, ...props });
+        }
+      });
+
+      $target.appendChild($group);
+      isInit = true;
     }
-  },
-});
+  };
 
-const button2 = new ToggleButton({
+  this.render();
+}
+
+new ButtonGroup({
   $target: $main,
-  text: "Button5",
-  onClick: (clickCount) => {
-    if (clickCount % 2 === 0) {
-      alert("2번째 클릭");
-    }
-  },
-});
-
-const button3 = new ToggleButton({
-  $target: $main,
-  text: "Button6",
-});
-
-$main.appendChild(document.createElement("br"));
-
-new TimerButton({
-  $target: $main,
-  text: "3초 뒤 자동",
-});
-
-new TimerButton({
-  $target: $main,
-  text: "5초 뒤 자동",
-  timer: 1000 * 5,
+  buttons: [
+    {
+      type: "toggle",
+      text: "토글 버튼1",
+    },
+    {
+      type: "toggle",
+      text: "토글 버튼2",
+    },
+    {
+      type: "timer",
+      text: "타이머 버튼1",
+    },
+    {
+      type: "timer",
+      text: "타이머 버튼2",
+      timer: 1000 * 1,
+    },
+  ],
 });
