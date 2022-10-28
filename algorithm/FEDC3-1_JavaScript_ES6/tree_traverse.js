@@ -1,7 +1,3 @@
-const preOrderList = [];
-const inOrderList = [];
-const postOrderList = [];
-
 class Node {
   constructor(value) {
     this.value = value;
@@ -15,41 +11,42 @@ class Tree {
     this.root = node;
   }
 
-  display() {
-    // level order
-    const queue = [];
-    queue.push(this.root);
-
-    while (queue.length) {
-      const currentNode = queue.shift();
-      console.log(currentNode.value);
-      if (currentNode.left) queue.push(currentNode.left);
-      if (currentNode.right) queue.push(currentNode.right);
+  preorder(currentNode = this.root, preOrderList = []) {
+    if (!currentNode) {
+      return;
     }
-  }
 
-  preorder(currentNode = this.root) {
     preOrderList.push(currentNode.value);
-    if (currentNode.left !== null) this.preorder(currentNode.left);
-    if (currentNode.right !== null) this.preorder(currentNode.right);
+    this.preorder(currentNode.left, preOrderList);
+    this.preorder(currentNode.right, preOrderList);
+
+    return preOrderList;
   }
 
-  inorder(currentNode = this.root) {
-    if (currentNode.left !== null) this.inorder(currentNode.left);
+  inorder(currentNode = this.root, inOrderList = []) {
+    if (!currentNode) {
+      return;
+    }
+
+    this.inorder(currentNode.left, inOrderList);
     inOrderList.push(currentNode.value);
-    if (currentNode.right !== null) this.inorder(currentNode.right);
+    this.inorder(currentNode.right, inOrderList);
+
+    return inOrderList;
   }
 
-  postorder(currentNode = this.root) {
-    if (currentNode.left !== null) this.postorder(currentNode.left);
-    if (currentNode.right !== null) this.postorder(currentNode.right);
+  postorder(currentNode = this.root, postOrderList = []) {
+    if (!currentNode) {
+      return;
+    }
+
+    this.postorder(currentNode.left, postOrderList);
+    this.postorder(currentNode.right, postOrderList);
     postOrderList.push(currentNode.value);
+
+    return postOrderList;
   }
 }
-
-const displayList = (list, name) => {
-  console.log(`${name} : ${list.join(" -> ")}`);
-};
 
 const tree = new Tree(new Node(0));
 
@@ -67,11 +64,10 @@ tree.root.left.right.left = new Node(9);
 tree.root.left.right.right = new Node(10);
 tree.root.right.left.left = new Node(11);
 
-//tree.display()
+const displayList = (list, name) => {
+  console.log(`${name} : ${list.join(" -> ")}`);
+};
 
-tree.preorder();
-tree.inorder();
-tree.postorder();
-displayList(preOrderList, "전위순회");
-displayList(inOrderList, "중위순회");
-displayList(postOrderList, "후위순회");
+displayList(tree.preorder(), "전위순회");
+displayList(tree.inorder(), "중위순회");
+displayList(tree.postorder(), "후위순회");
