@@ -36,31 +36,56 @@ document.querySelectorAll("button").forEach(($button) => {
   });
 });
 
+/* -------------------------------------------------------------------------- */
+
 //추상화 하여 사용하기
 function ToggleButton({ $target, text, onClick }) {
   const $button = document.createElement("button");
-  let buttonClickCount = 0;
 
   $target.appendChild($button);
 
+  this.state = {
+    clickCount: 0,
+    toggled: false,
+  };
+
+  this.setState = (nextState) => {
+    this.state = nextState;
+    this.render();
+  };
+
   this.render = () => {
     $button.textContent = text;
+    $button.style.textDecoration = this.state.toggled ? "line-through" : "none";
   };
 
   $button.addEventListener("click", () => {
-    buttonClickCount++;
-    if ($button.style.textDecoration === "") {
-      $button.style.textDecoration = "line-through";
-    } else {
-      $button.style.textDecoration = "";
-    }
+    this.setState({
+      clickCount: this.state.clickCount + 1,
+      toggled: !this.state.toggled,
+    });
 
     if (onClick) {
-      onClick(buttonClickCount);
+      onClick(this.state.clickCount);
     }
   });
 
   this.render();
+}
+
+function TimerButton({ $target, text, timer = 3000 }) {
+  const button = new ToggleButton({
+    $target,
+    text,
+    onClick: () => {
+      setTimeout(() => {
+        button.setState({
+          ...button.state,
+          toggled: !button.state.toggled,
+        });
+      }, timer);
+    },
+  });
 }
 
 const button1 = new ToggleButton({
@@ -86,4 +111,17 @@ const button2 = new ToggleButton({
 const button3 = new ToggleButton({
   $target: $main,
   text: "Button6",
+});
+
+$main.appendChild(document.createElement("br"));
+
+new TimerButton({
+  $target: $main,
+  text: "3초 뒤 자동",
+});
+
+new TimerButton({
+  $target: $main,
+  text: "5초 뒤 자동",
+  timer: 1000 * 5,
 });
