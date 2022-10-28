@@ -13,6 +13,8 @@ const $button3 = document.createElement("button");
 $button3.textContent = "버튼3";
 $button1.className = "button3";
 
+let buttonClickCount = 0;
+
 $main.appendChild($button1);
 $main.appendChild($button2);
 $main.appendChild($button3);
@@ -25,6 +27,7 @@ const toggleButton = ($button) => {
   } else {
     $button.style.textDecoration = "";
   }
+  $button.textContent = `버튼 클릭 횟수: ${++buttonClickCount}`;
 };
 
 document.querySelectorAll("button").forEach(($button) => {
@@ -36,6 +39,7 @@ document.querySelectorAll("button").forEach(($button) => {
 //추상화 하여 사용하기
 function ToggleButton({ $target, text, onClick }) {
   const $button = document.createElement("button");
+  let buttonClickCount = 0;
 
   $target.appendChild($button);
 
@@ -44,10 +48,15 @@ function ToggleButton({ $target, text, onClick }) {
   };
 
   $button.addEventListener("click", () => {
+    buttonClickCount++;
     if ($button.style.textDecoration === "") {
       $button.style.textDecoration = "line-through";
     } else {
       $button.style.textDecoration = "";
+    }
+
+    if (onClick) {
+      onClick(buttonClickCount);
     }
   });
 
@@ -57,11 +66,21 @@ function ToggleButton({ $target, text, onClick }) {
 const button1 = new ToggleButton({
   $target: $main,
   text: "Button4",
+  onClick: (clickCount) => {
+    if (clickCount % 3 === 0) {
+      alert("3번째 클릭");
+    }
+  },
 });
 
 const button2 = new ToggleButton({
   $target: $main,
   text: "Button5",
+  onClick: (clickCount) => {
+    if (clickCount % 2 === 0) {
+      alert("2번째 클릭");
+    }
+  },
 });
 
 const button3 = new ToggleButton({
