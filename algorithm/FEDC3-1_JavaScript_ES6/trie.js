@@ -5,6 +5,29 @@ class Node {
   }
 }
 
+class Queue {
+  constructor() {
+    this.queue = [];
+    this.front = 0;
+    this.rear = 0;
+  }
+
+  enqueue(value) {
+    this.queue.push(...value);
+    this.rear += value.size;
+  }
+
+  dequeue() {
+    const value = this.queue[this.front];
+    delete this.queue[this.front++];
+    return value;
+  }
+
+  getSize() {
+    return this.rear - this.front;
+  }
+}
+
 class Trie {
   constructor() {
     this.root = new Node();
@@ -27,13 +50,13 @@ class Trie {
   }
 
   search(keyword) {
-    let currentNode = this.root;
-    const values = []; //검색된 값들
-    const queue = []; // 검색 대상
-
     if (!/[a-zA-Z]/.test(keyword)) {
       return console.log(`${keyword}: 검색 불가. 영어만 입력하세요`);
     }
+
+    let currentNode = this.root;
+    const values = []; //검색된 값들
+    const queue = new Queue(); // 검색 대상
 
     for (const char of keyword) {
       //검색어 마지막글자가 보관된 node까지 이동
@@ -43,16 +66,15 @@ class Trie {
       }
     }
 
-    queue.push(...currentNode.children);
+    queue.enqueue(currentNode.children);
 
-    while (queue.length) {
-      const tmp = queue.shift(); //Queue 사용하면 spread Operator 사용하기 어려워서 일반 배열 사용
-      const { value, children } = tmp[1];
+    while (queue.getSize()) {
+      const { value, children } = queue.dequeue()[1];
 
       if (children.size === 0) {
         values.push(value.slice(0, -1)); //마지막 "." 제거
       }
-      queue.push(...children);
+      queue.enqueue(children);
     }
 
     return console.log(`${keyword} 검색 결과: ${values}`);
