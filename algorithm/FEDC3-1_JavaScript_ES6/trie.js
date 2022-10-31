@@ -1,7 +1,8 @@
 class Node {
-  constructor(value = "") {
+  constructor(value = "", isEnd = false) {
     this.value = value;
     this.children = new Map();
+    this.endPoint = isEnd;
   }
 }
 
@@ -13,8 +14,7 @@ class Queue {
   }
 
   enqueue(value) {
-    this.queue.push(...value);
-    this.rear += value.size;
+    this.queue[this.rear++] = value;
   }
 
   dequeue() {
@@ -35,23 +35,28 @@ class Trie {
 
   insert(string) {
     if (!/[a-zA-Z]/.test(string)) {
-      return console.log(`${string}: 삽입 불가. 영어만 입력하세요`);
+      return console.log(`${string}: 삽입 불가! 영어만 입력하세요`);
     }
 
     let currentNode = this.root;
-    string += "."; //같은 철자를 포함한 문자가 추가될 경우 구분을 위해 "." 추가
+    let cnt = 0;
 
     for (const char of string) {
       if (!currentNode.children.has(char)) {
-        currentNode.children.set(char, new Node(currentNode.value + char));
+        if (cnt === string.length - 1) {
+          currentNode.children.set(char, new Node(currentNode.value + char, true));
+        } else {
+          currentNode.children.set(char, new Node(currentNode.value + char));
+        }
       }
       currentNode = currentNode.children.get(char);
+      cnt++;
     }
   }
 
   search(keyword) {
     if (!/[a-zA-Z]/.test(keyword)) {
-      return console.log(`${keyword}: 검색 불가. 영어만 입력하세요`);
+      return console.log(`${keyword}: 검색 불가! 영어만 입력하세요`);
     }
 
     let currentNode = this.root;
@@ -60,21 +65,25 @@ class Trie {
 
     for (const char of keyword) {
       //검색어 마지막글자가 보관된 node까지 이동
-      if (currentNode.children.has(char)) currentNode = currentNode.children.get(char);
-      else {
+      if (currentNode.children.has(char)) {
+        currentNode = currentNode.children.get(char);
+      } else {
         return console.log(`${keyword} 검색 결과: 없음`);
       }
     }
 
-    queue.enqueue(currentNode.children);
+    queue.enqueue(currentNode);
 
     while (queue.getSize()) {
-      const { value, children } = queue.dequeue()[1];
+      const { value, children, endPoint } = queue.dequeue();
 
-      if (children.size === 0) {
-        values.push(value.slice(0, -1)); //마지막 "." 제거
+      if (endPoint) {
+        values.push(value);
       }
-      queue.enqueue(children);
+
+      for (const node of children.values()) {
+        queue.enqueue(node);
+      }
     }
 
     return console.log(`${keyword} 검색 결과: ${values}`);
