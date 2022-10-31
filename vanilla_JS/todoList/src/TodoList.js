@@ -1,5 +1,5 @@
 function TodoList({ $target, initialState }) {
-  const $todoList = document.createElement('div');
+  const $todoList = document.createElement("div");
 
   $target.appendChild($todoList);
 
@@ -13,7 +13,7 @@ function TodoList({ $target, initialState }) {
   this.render = () => {
     $todoList.innerHTML = `
     <ul>
-      ${this.state.map(({ text }) => `<li>${text}</li>`).join('')}
+      ${this.state.map(({ text }) => `<li>${text}</li>`).join("")}
     </ui>
     `;
   };

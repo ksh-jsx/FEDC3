@@ -1,19 +1,16 @@
 function App({ $target, initialState }) {
   new Header({
     $target,
-    text: 'Simple Todo List',
+    text: "Simple Todo List",
   });
 
   new TodoForm({
     $target: $app,
     onSubmit: (text) => {
-      const nextState = [
-        ...todoList.state,
-        {
-          text,
-        },
-      ];
+      const nextState = [...todoList.state, { text }];
       todoList.setState(nextState);
+
+      storage.setItem("todos", JSON.stringify(nextState));
     },
   });
 
