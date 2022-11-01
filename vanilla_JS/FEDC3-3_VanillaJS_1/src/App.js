@@ -13,7 +13,7 @@ export class App {
       res: [],
     };
 
-    this.$target = document.createElement("div");
+    this.$target = document.createElement("div"); // 모달 띄울 시 배경 어둡게 하는 용
     this.$target.className = "modal_background";
 
     $app.append(this.$target);
@@ -81,6 +81,7 @@ export class App {
       });
 
       const res = await request();
+
       this.setState({
         ...this.state,
         res,
