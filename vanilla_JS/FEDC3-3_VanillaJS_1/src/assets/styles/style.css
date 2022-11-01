@@ -1,0 +1,352 @@
+:root {
+  --primary: #6297ff; /* var(--primary)   */
+  --primary70: #91b6ff; /* var(--primary70) */
+  --primary30: #c0d6ff; /* var(--primary30) */
+  --primary10: #eff5ff; /* var(--primary10) */
+  --dark100: #333333; /* var(--dark100)   */
+  --gray50: #858585; /* var(--gray50)    */
+  --gray30: #f3f1f4d2; /* var(--gray30)    */
+  --gray10: #f5f5f5; /* var(--gray10)    */
+  --white: #fff; /* var(--white)    */
+}
+
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+* {
+  font-family: "Pretendard-Regular";
+  letter-spacing: 1px;
+}
+button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 0;
+  background-color: var(--white);
+}
+html {
+  width: 100%;
+  min-height: 100%;
+}
+body {
+  background: linear-gradient(
+    135deg,
+    var(--dark100) 0%,
+    rgba(7, 159, 2255, 0.3) 0%,
+    var(--primary) 100%
+  );
+  background-repeat: no-repeat;
+  margin: 0;
+  padding-bottom: 100px;
+}
+#app {
+  background-color: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgb(17 17 26 / 10%), 0 16px 56px rgb(17 17 26 / 10%),
+    0 24px 80px rgb(17 17 26 / 10%);
+  margin: 100px auto 0;
+  max-width: 500px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+}
+
+/*header*/
+.header {
+  height: 100px;
+  font-size: 50px;
+  font-weight: 700;
+  padding-top: 20px;
+  text-align: left;
+  width: 95%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header > h1 {
+  -webkit-text-fill-color: transparent;
+  background: linear-gradient(to right bottom, var(--primary70), var(--primary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  padding-left: 10px;
+  white-space: nowrap;
+  font-size: 50px;
+  margin-top: 10px;
+}
+.header .modal_btn {
+  width: 130px;
+  height: 45px;
+  background-color: var(--primary);
+  border-radius: 8px;
+  color: var(--white);
+  font-size: 13px;
+  font-weight: bold;
+  position: relative;
+  right: -5px;
+  top: -35px;
+  letter-spacing: 1.5px;
+}
+
+/*modal*/
+.modal {
+  background-color: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgb(17 17 26 / 10%), 0 16px 56px rgb(17 17 26 / 10%),
+    0 24px 80px rgb(17 17 26 / 10%);
+  left: 50%;
+  margin-top: 100px;
+  position: absolute;
+  z-index: 20;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  width: 500px;
+}
+.modal.on {
+  display: flex;
+}
+.modal.off {
+  display: none;
+}
+.modal_background {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+}
+.modal form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 10px;
+}
+.modal input {
+  width: calc(100% - 20px);
+  height: 50px;
+  margin: 5px 0;
+  padding-left: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--gray50);
+}
+.modal form > button {
+  width: 100%;
+  height: 50px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  filter: drop-shadow(0px 0px 10px #dcdcdc);
+}
+.modal .tdl_submit {
+  margin-top: 35px;
+  background-color: var(--primary);
+  color: var(--white);
+}
+.modal .modal_close {
+  margin-top: 10px;
+  background-color: var(--primary30);
+  color: var(--white);
+}
+
+/*section*/
+.section {
+  margin: 0 auto;
+  margin-bottom: 50px;
+  margin-top: 50px;
+  width: 95%;
+}
+.section > ul {
+  width: 95%;
+  list-style: none;
+  padding-left: 0px;
+  margin: 0 auto;
+}
+.section .tdl {
+  background-color: var(--white);
+  border: 2px solid var(--gray10);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+}
+.section .tdl_header {
+  background-color: var(--gray10);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  width: 100%;
+}
+.section .tdl_checkBox {
+  flex: 1 1;
+  padding-left: 20px;
+  padding-right: 10px;
+}
+.section .tdl_checkBox > input[type="checkbox"] {
+  display: none;
+}
+.section .tdl_checkBox > input[type="checkbox"] + label {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--gray50);
+  position: relative;
+}
+input[type="checkbox"]:checked + label::after {
+  content: "✔";
+  font-size: 15px;
+
+  text-align: center;
+  position: relative;
+  left: 1px;
+  top: -3px;
+}
+.section .tdl_fold_zone {
+  display: flex;
+  flex: 9 1;
+  padding-left: 10px;
+  padding-right: 20px;
+  cursor: pointer;
+}
+.section .tdl_fold_zone > div {
+  display: flex;
+  flex-direction: column;
+  float: left;
+  justify-content: center;
+
+  font-weight: bold;
+}
+.section .tdl_title {
+  color: var(--dark100);
+  flex: 5 1;
+
+  font-size: 22px;
+  line-height: 1.2;
+}
+.section .tdl_dDay {
+  flex: 4 1;
+  font-size: 17px;
+  font-weight: 700;
+  text-align: center;
+}
+.section .tdl_dDay.normal {
+  color: var(--primary);
+}
+section .tdl_dDay.complete {
+  color: var(--gray50);
+}
+.section .tdl_dDay.end {
+  color: #ff0000;
+}
+.section .tdl_article {
+  display: none;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.section .tdl_modify_btns {
+  height: 30px;
+  display: flex;
+  float: right;
+}
+.section .tdl_modify_btns > button {
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--primary);
+}
+.section .tdl_content {
+  border-bottom: 1px solid var(--primary);
+  color: var(--dark100);
+  float: left;
+  font-size: 20px;
+  padding-bottom: 20px;
+  width: 100%;
+  font-weight: bold;
+}
+.section .tdl_dates {
+  color: var(--gray50);
+  float: left;
+  font-size: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  width: 100%;
+}
+.section .tdl_dates > div {
+  width: 50%;
+  float: left;
+}
+
+/*footer*/
+.footer {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 10px;
+  width: 100%;
+}
+.footer .filter {
+  background-color: var(--gray10);
+  border-right: 1px solid var(--gray50);
+  border-top: 1px solid var(--gray50);
+  color: var(--dark);
+  cursor: pointer;
+  font-weight: 700;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+}
+.footer > .filter:first-child {
+  background-color: var(--white);
+  border-right: 1px solid var(--gray50);
+  border-top: 0;
+  border-radius: 0 0 0 10px;
+}
+.footer > .filter:last-child {
+  border-radius: 0 0 10px;
+}
+.footer > .filter.on {
+  background-color: var(--white);
+  border-right: 1px solid var(--gray50);
+  border-top: 0;
+}
+.footer > .filter.off {
+  background-color: var(--gray10);
+  border-right: 1px solid var(--gray50);
+  border-top: 1px solid var(--gray50);
+}
+/*datePicker*/
+.datepicker-picker {
+  width: 300px;
+  border: 1px solid #000;
+  padding: 10px;
+  display: none;
+}
+.datepicker-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.days-of-week {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--gray50);
+}
+.datepicker-grid {
+  display: grid;
+  height: 200px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+.datepicker-grid > span {
+  position: relative;
+  top: 50%;
+  cursor: pointer;
+}
