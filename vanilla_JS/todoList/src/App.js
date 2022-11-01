@@ -41,7 +41,7 @@ export default function App({ $target }) {
     initialState: this.state.todos,
     onClick: (id) => {
       const selectedTodo = this.state.todos.find((todo) => todo.id === id);
-      request(`https://kdt.roto.codes/comments?todo.id=${id}`, (comments) => {
+      request(`https://kdt.roto.codes/comments?todo.id=${id}`).then((comments) => {
         this.setState({
           ...this.state,
           selectedTodo,
@@ -60,7 +60,7 @@ export default function App({ $target }) {
   });
 
   this.init = () => {
-    request("https://kdt.roto.codes/todos", (todos) => {
+    request("https://kdt.roto.codes/todos").then((todos) => {
       this.setState({
         ...this.state,
         todos,
