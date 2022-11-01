@@ -5,8 +5,9 @@
   --primary10: #eff5ff; /* var(--primary10) */
   --dark100: #333333; /* var(--dark100)   */
   --gray50: #858585; /* var(--gray50)    */
-  --gray30: #fcfcfc; /* var(--gray30)    */
-  --gray10: #ebebeb; /* var(--gray10)    */
+  --gray30: #f3f1f4d2; /* var(--gray30)    */
+  --gray10: #f5f5f5; /* var(--gray10)    */
+  --white: #fff; /* var(--white)    */
 }
 
 @font-face {
@@ -26,7 +27,7 @@ button {
   -moz-appearance: none;
   appearance: none;
   border: 0;
-  background-color: #fff;
+  background-color: var(--white);
 }
 html {
   width: 100%;
@@ -44,7 +45,7 @@ body {
   padding-bottom: 100px;
 }
 #app {
-  background-color: #fff;
+  background-color: var(--white);
   border-radius: 10px;
   box-shadow: 0 8px 24px rgb(17 17 26 / 10%), 0 16px 56px rgb(17 17 26 / 10%),
     0 24px 80px rgb(17 17 26 / 10%);
@@ -83,7 +84,7 @@ body {
   height: 45px;
   background-color: var(--primary);
   border-radius: 8px;
-  color: #fff;
+  color: var(--white);
   font-size: 13px;
   font-weight: bold;
   position: relative;
@@ -94,13 +95,10 @@ body {
 
 /*modal*/
 .modal {
-  background-color: #fff;
+  background-color: var(--white);
   border-radius: 10px;
   box-shadow: 0 8px 24px rgb(17 17 26 / 10%), 0 16px 56px rgb(17 17 26 / 10%),
     0 24px 80px rgb(17 17 26 / 10%);
-  flex-direction: column;
-  height: 500px;
-  justify-content: center;
   left: 50%;
   margin-top: 100px;
   position: absolute;
@@ -125,6 +123,40 @@ body {
   background-color: rgba(0, 0, 0, 0.5);
   display: none;
 }
+.modal form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 10px;
+}
+.modal input {
+  width: calc(100% - 20px);
+  height: 50px;
+  margin: 5px 0;
+  padding-left: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--gray50);
+}
+.modal form > button {
+  width: 100%;
+  height: 50px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  filter: drop-shadow(0px 0px 10px #dcdcdc);
+}
+.modal .tdl_submit {
+  margin-top: 35px;
+  background-color: var(--primary);
+  color: var(--white);
+}
+.modal .modal_close {
+  margin-top: 10px;
+  background-color: var(--primary30);
+  color: var(--white);
+}
+
 /*section*/
 .section {
   margin: 0 auto;
@@ -133,23 +165,21 @@ body {
   width: 95%;
 }
 .section > ul {
-  margin-bottom: 50px;
-  margin-top: 50px;
   width: 95%;
   list-style: none;
   padding-left: 0px;
   margin: 0 auto;
 }
-.section > ul > li {
-  background-color: var(--gray30);
-  border: 2px solid var(--gray30);
+.section .tdl {
+  background-color: var(--white);
+  border: 2px solid var(--gray10);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   margin: 5px;
 }
 .section .tdl_header {
-  background-color: #f3f1f4;
+  background-color: var(--gray10);
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -161,11 +191,31 @@ body {
   padding-left: 20px;
   padding-right: 10px;
 }
+.section .tdl_checkBox > input[type="checkbox"] {
+  display: none;
+}
+.section .tdl_checkBox > input[type="checkbox"] + label {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--gray50);
+  position: relative;
+}
+input[type="checkbox"]:checked + label::after {
+  content: "✔";
+  font-size: 15px;
+
+  text-align: center;
+  position: relative;
+  left: 1px;
+  top: -3px;
+}
 .section .tdl_fold_zone {
   display: flex;
   flex: 9 1;
   padding-left: 10px;
   padding-right: 20px;
+  cursor: pointer;
 }
 .section .tdl_fold_zone > div {
   display: flex;
@@ -183,9 +233,120 @@ body {
   line-height: 1.2;
 }
 .section .tdl_dDay {
-  color: var(--gray50);
   flex: 4 1;
   font-size: 17px;
   font-weight: 700;
   text-align: center;
+}
+.section .tdl_dDay.normal {
+  color: var(--primary);
+}
+section .tdl_dDay.complete {
+  color: var(--gray50);
+}
+.section .tdl_dDay.end {
+  color: #ff0000;
+}
+.section .tdl_article {
+  display: none;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.section .tdl_modify_btns {
+  height: 30px;
+  display: flex;
+  float: right;
+}
+.section .tdl_modify_btns > button {
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--primary);
+}
+.section .tdl_content {
+  border-bottom: 1px solid var(--primary);
+  color: var(--dark100);
+  float: left;
+  font-size: 20px;
+  padding-bottom: 20px;
+  width: 100%;
+  font-weight: bold;
+}
+.section .tdl_dates {
+  color: var(--gray50);
+  float: left;
+  font-size: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  width: 100%;
+}
+.section .tdl_dates > div {
+  width: 50%;
+  float: left;
+}
+
+/*footer*/
+.footer {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 10px;
+  width: 100%;
+}
+.footer .filter {
+  background-color: var(--gray10);
+  border-right: 1px solid var(--gray50);
+  border-top: 1px solid var(--gray50);
+  color: var(--dark);
+  cursor: pointer;
+  font-weight: 700;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+}
+.footer > .filter:first-child {
+  background-color: var(--white);
+  border-right: 1px solid var(--gray50);
+  border-top: 0;
+  border-radius: 0 0 0 10px;
+}
+.footer > .filter:last-child {
+  border-radius: 0 0 10px;
+}
+.footer > .filter.on {
+  background-color: var(--white);
+  border-right: 1px solid var(--gray50);
+  border-top: 0;
+}
+.footer > .filter.off {
+  background-color: var(--gray10);
+  border-right: 1px solid var(--gray50);
+  border-top: 1px solid var(--gray50);
+}
+/*datePicker*/
+.datepicker-picker {
+  width: 300px;
+  border: 1px solid #000;
+  padding: 10px;
+  display: none;
+}
+.datepicker-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.days-of-week {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--gray50);
+}
+.datepicker-grid {
+  display: grid;
+  height: 200px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+.datepicker-grid > span {
+  position: relative;
+  top: 50%;
+  cursor: pointer;
 }

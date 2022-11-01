@@ -1,6 +1,7 @@
 import { Header } from "./components/Header.js";
 import { TodoForm } from "./components/TodoForm.js";
 import { TodoListSection } from "./components/TodoListSection.js";
+import { TodoCount } from "./components/TodoCount.js";
 import { request } from "./api.js";
 import { storage } from "./api.js";
 
@@ -10,6 +11,8 @@ export class App {
       isInit: false,
       isLoading: false,
       modalVisibility: false,
+      tabState: ["on", "off", "off", "off"],
+      origin: [],
       res: [],
     };
 
@@ -38,13 +41,17 @@ export class App {
           modalVisibility: false,
         });
       },
-      onSubmit: (text) => {
+      onSubmit: ({ title, content, targetDate }) => {
         const nextState = [
           ...this.state.res,
           {
-            title: text,
-            content: "test",
+            title,
+            content,
+            targetDate,
             isCompleted: false,
+            isFolded: true,
+            createdAt: new Date(),
+            modifiedAt: null,
           },
         ];
 
@@ -60,6 +67,71 @@ export class App {
     this.todoListSection = new TodoListSection({
       $app,
       initialState: this.state,
+      onFold: (id) => {
+        const nextState = [...this.state.res];
+        nextState[id].isFolded = !nextState[id].isFolded;
+        this.setState({
+          ...this.state,
+          res: nextState,
+        });
+      },
+      onCheck: (id) => {
+        const nextState = [...this.state.res];
+        nextState[id].isCompleted = !nextState[id].isCompleted;
+        this.setState({
+          ...this.state,
+          res: nextState,
+        });
+        storage.setItem("todos", JSON.stringify(this.state.res));
+      },
+    });
+
+    this.todoCount = new TodoCount({
+      $app,
+      initialState: this.state,
+      onClick: (id) => {
+        const today = new Date();
+        switch (id) {
+          case "1":
+            this.setState({
+              ...this.state,
+              tabState: ["on", "off", "off", "off"],
+              res: this.state.origin,
+            });
+            break;
+          case "2":
+            this.setState({
+              ...this.state,
+              tabState: ["off", "on", "off", "off"],
+              res: this.state.origin.filter((todo) => todo.isCompleted),
+            });
+            break;
+          case "3":
+            this.setState({
+              ...this.state,
+              tabState: ["off", "off", "on", "off"],
+              res: this.state.origin.filter((todo) => {
+                const [mm, dd, yy] = todo.targetDate.split("/");
+                const myDate = new Date(yy, mm - 1, dd);
+
+                return myDate - today > 0 ? (todo.isCompleted ? false : true) : false;
+              }),
+            });
+            break;
+          case "4":
+            this.setState({
+              ...this.state,
+              tabState: ["off", "off", "off", "on"],
+              res: this.state.origin.filter((todo) => {
+                const [mm, dd, yy] = todo.targetDate.split("/");
+                const myDate = new Date(yy, mm - 1, dd);
+
+                return myDate - today > 0 ? false : todo.isCompleted ? false : true;
+              }),
+            });
+            break;
+        }
+      },
     });
 
     this.init();
@@ -71,6 +143,7 @@ export class App {
     this.header.setState(this.state);
     this.todoForm.setState(this.state);
     this.todoListSection.setState(this.state.res);
+    this.todoCount.setState(this.state);
   }
 
   async init() {
@@ -85,6 +158,7 @@ export class App {
       this.setState({
         ...this.state,
         res,
+        origin: res,
       });
     } catch (e) {
       console.error(e);
