@@ -39,14 +39,14 @@ export default function App({ $target }) {
   const todoList = new TodoList({
     $target,
     initialState: this.state.todos,
-    onClick: (id) => {
+    onClick: async (id) => {
       const selectedTodo = this.state.todos.find((todo) => todo.id === id);
-      request(`https://kdt.roto.codes/comments?todo.id=${id}`).then((comments) => {
-        this.setState({
-          ...this.state,
-          selectedTodo,
-          comments,
-        });
+      const data = request(`https://kdt.roto.codes/comments?todo.id=${id}`);
+
+      this.setState({
+        ...this.state,
+        selectedTodo,
+        comments: data,
       });
     },
   });
@@ -59,12 +59,12 @@ export default function App({ $target }) {
     },
   });
 
-  this.init = () => {
-    request("https://kdt.roto.codes/todos").then((todos) => {
-      this.setState({
-        ...this.state,
-        todos,
-      });
+  this.init = async () => {
+    const data = await request("https://kdt.roto.codes/todos");
+
+    this.setState({
+      ...this.state,
+      todos: data,
     });
   };
 
