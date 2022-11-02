@@ -1,6 +1,6 @@
 export default function Cart({ target, initialState, onRemove }) {
-  const cartElement = document.createElement("div");
-  target.appendChild(cartElement);
+  const $cart = document.createElement("div");
+  target.appendChild($cart);
 
   this.state = initialState;
 
@@ -18,27 +18,40 @@ export default function Cart({ target, initialState, onRemove }) {
     );
   };
 
+  const renderOption = (option, index) => {
+    const { productName, basePrice } = this.state;
+    return `
+      <li data-index="${index}">
+        ${productName} - ${option.optionName} | 
+        ${basePrice + option.optionPrice}, ${option.ea}개
+        <button class="remove">x</button>
+      </li>
+    `;
+  };
+
   this.render = () => {
-    const { productName, basePrice, selectedOptions } = this.state;
-    console.log(selectedOptions);
-    cartElement.innerHTML = `
+    const { selectedOptions } = this.state;
+
+    $cart.innerHTML = `
       <ul>
         ${
           Array.isArray(selectedOptions) &&
-          selectedOptions
-            .map((option) => {
-              console.log(option);
-              return `<li>${productName} - ${option.optionName} | ${
-                basePrice + option.optionPrice
-              }, ${option.ea}개
-              </li>`;
-            })
-            .join("")
+          selectedOptions.map((option, index) => renderOption(option, index)).join("")
         }
       </ul>
       <div>
-        ${calculateTotalPrice()}
+        ${calculateTotalPrice()}원
       </div>
     `;
+
+    $cart.querySelectorAll(".remove").forEach(($button) => {
+      $button.addEventListener("click", (e) => {
+        const $li = e.target.closest("li");
+        if ($li) {
+          const { index } = $li.dataset;
+          onRemove(parseInt(index));
+        }
+      });
+    });
   };
 }
