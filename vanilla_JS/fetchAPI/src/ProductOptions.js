@@ -10,6 +10,7 @@ export default function ProductOptions({ $target, initialState, onSelect }) {
   };
 
   const createOptionFullName = ({ optionName, optionPrice, stock }) => {
+    console.log(stock);
     return `${optionName} ${optionPrice > 0 ? `(옵션가 ${optionPrice})` : ""} | ${
       stock > 0 ? `재고 ${stock}` : "재고없음"
     }`;
