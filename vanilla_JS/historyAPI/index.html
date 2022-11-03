@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>test</title>
+  </head>
+
+  <body>
+    <div id="container"></div>
+    <a class="LinkItem" href="/product-list">product list</a>
+    <a class="LinkItem" href="/article-list">article list</a>
+    <script>
+      function route() {
+        const { pathname } = location;
+        const $container = document.querySelector("#container");
+
+        if (pathname === "/") {
+          $container.innerHTML = "<h1>Home</h1>";
+        } else if (pathname === "/product-list") {
+          $container.innerHTML = "<h1>상품 목록</h1>";
+        } else if (pathname === "/article-list") {
+          $container.innerHTML = "<h1>게시글 목록</h1>";
+        }
+      }
+      route();
+      window.addEventListener("click", (e) => {
+        if (e.target.className === "LinkItem") {
+          e.preventDefault();
+
+          const { href } = e.target;
+          const path = href.replace(window.location.origin, "");
+
+          history.pushState(null, null, path);
+          route();
+        }
+      });
+      window.addEventListener("popstate", () => route());
+    </script>
+  </body>
+</html>
