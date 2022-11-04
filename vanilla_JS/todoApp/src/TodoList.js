@@ -1,4 +1,4 @@
-export default function TodoList({ $target, initialState }) {
+export default function TodoList({ $target, initialState, onRemove, onToggle }) {
   const $todo = document.createElement("div");
 
   $target.appendChild($todo);
@@ -11,7 +11,9 @@ export default function TodoList({ $target, initialState }) {
   };
 
   this.render = () => {
-    if (this.state.length === 0) {
+    const { isLoading, todos } = this.state;
+
+    if (!isLoading && todos.length === 0) {
       $todo.innerHTML = "Todo가 없습니다";
       return;
     }
@@ -19,7 +21,7 @@ export default function TodoList({ $target, initialState }) {
     //prettier-ignore
     $todo.innerHTML = `
       <ul>
-        ${this.state.map(({_id,content,isCompleted}) => `
+        ${todos.map(({_id,content,isCompleted}) => `
           <li data-id=${_id} class="todo-item">
             ${isCompleted ? `<s>${content}</s>` : content}
             <button class="remove">X</button>
