@@ -1,7 +1,4 @@
-import TodoForm from "./TodoForm.js";
-import TodoList from "./TodoList.js";
-
-const API_END_PONT = "https://kdt-frontend.todo-api.programmers.co.kr/";
+import App from "./App.js";
 
 const DUMMY = [
   {
@@ -18,13 +15,4 @@ const DUMMY = [
 
 const $target = document.querySelector("#app");
 
-new TodoForm({
-  $target,
-  onSubmit: (content) => {
-    alert(content);
-  },
-});
-new TodoList({
-  $target,
-  initialState: DUMMY,
-});
+new App({ $target });
