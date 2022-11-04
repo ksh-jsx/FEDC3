@@ -1,4 +1,5 @@
 import { request } from "./api";
+import { parse } from "./queryString.js";
 import Header from "./Header";
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
@@ -22,6 +23,8 @@ export default function App({ $target }) {
     $target: $userListContainer,
     initialState: this.state.userList,
     onSelect: async (username) => {
+      history.pushState(null, null, `/?selectedUsername=${username}`);
+
       this.setState({
         ...this.state,
         selectedUsername: username,
@@ -53,7 +56,7 @@ export default function App({ $target }) {
         todos: [...this.state.todos, todo],
       });
 
-      await request(`/${this.state.selectedUsername}?delay=1000`, {
+      await request(`/${this.state.selectedUsername}`, {
         method: "POST",
         body: JSON.stringify(todo),
       });
@@ -78,7 +81,7 @@ export default function App({ $target }) {
         ...this.state,
         todos: nextTodos,
       });
-
+      console.log(this.state.selectedUsername);
       await request(`/${this.state.selectedUsername}/${id}`, {
         method: "DELETE",
       });
@@ -143,7 +146,7 @@ export default function App({ $target }) {
         isTodoLoading: true,
       });
 
-      const todos = await request(`/${selectedUsername}?delay=1000`);
+      const todos = await request(`/${selectedUsername}`);
 
       this.setState({
         ...this.state,
@@ -155,7 +158,21 @@ export default function App({ $target }) {
 
   const init = async () => {
     await fetchUserList();
-    await fetchTodos();
+
+    // url에 특정사용자를 나타내는 값이 있을 경우
+    const { search } = location;
+
+    if (search.length > 0) {
+      const { selectedUsername } = parse(search.substring(1));
+
+      if (selectedUsername) {
+        this.setState({
+          ...this.state,
+          selectedUsername,
+        });
+        await fetchTodos();
+      }
+    }
   };
 
   this.render();
