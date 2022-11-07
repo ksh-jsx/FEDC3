@@ -1,31 +1,29 @@
-import Editor from "./Editor.js";
-import { setItem, getItem, removeItem } from "./storage.js";
-import { request } from "./api.js";
+import { request } from "../api.js";
+import Editor from "../Editor.js";
+import LinkButton from "../LinkButton.js";
+import { getItem, removeItem, setItem } from "../storage.js";
 
 export default function PostEditPage({ $target, initialState }) {
   const $post = document.createElement("div");
-
-  $post.classList.add("post-edit-page");
 
   this.state = initialState;
 
   let postLocalSaveKey = `temp-post-${this.state.postId}`;
 
   const post = getItem(postLocalSaveKey, {
-    title: "우와 신나는 코딩의 세계",
-    content: "재밌는 타이핑을 시작 해 볼까요~~",
+    title: "",
+    content: "",
   });
 
   let timer = null;
 
   const editor = new Editor({
     $target: $post,
-    initialState: { post },
+    initialState: post,
     onEditing: (post) => {
       if (timer !== null) {
         clearTimeout(timer);
       }
-
       timer = setTimeout(async () => {
         setItem(postLocalSaveKey, {
           ...post,
@@ -35,7 +33,7 @@ export default function PostEditPage({ $target, initialState }) {
         const isNew = this.state.postId === "new";
 
         if (isNew) {
-          const createdPost = await request("/posts/", {
+          const createdPost = await request("/posts", {
             method: "POST",
             body: JSON.stringify(post),
           });
@@ -48,8 +46,6 @@ export default function PostEditPage({ $target, initialState }) {
             method: "PUT",
             body: JSON.stringify(post),
           });
-
-          removeItem(postLocalSaveKey);
         }
       }, 2000);
     },
@@ -59,9 +55,7 @@ export default function PostEditPage({ $target, initialState }) {
     if (this.state.postId !== nextState.postId) {
       postLocalSaveKey = `temp-post-${nextState.postId}`;
       this.state = nextState;
-
       await fetchPost();
-
       return;
     }
 
@@ -83,6 +77,7 @@ export default function PostEditPage({ $target, initialState }) {
   const fetchPost = async () => {
     const { postId } = this.state;
 
+    //post id가 new, 즉 특정 Id 값이 있는 post라면 저장된 post를 불러오는 역할
     if (postId !== "new") {
       const post = await request(`/posts/${postId}`);
 
@@ -108,5 +103,11 @@ export default function PostEditPage({ $target, initialState }) {
     }
   };
 
-  fetchPost();
+  new LinkButton({
+    $target: $post,
+    initialState: {
+      text: "목록으로 이동",
+      link: "/",
+    },
+  });
 }

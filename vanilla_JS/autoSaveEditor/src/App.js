@@ -1,18 +1,9 @@
-import PostsPage from "./PostsPage.js";
-import PostEditPage from "./PostEditPage.js";
-
-/*
-URL 규칙
-
-루트 : postpages 그리기
-루트 외 : 
-/posts/{id} - id에 해당하는 포스트 생성
-/posts/new - 새 포스트 생성
-
-*/
+import PostsPage from "./routes/PostsPage.js";
+import PostEditPage from "./routes/PostEditPage.js";
+import { initRouter } from "./router.js";
 
 export default function App({ $target }) {
-  const postPages = new PostsPage({
+  const postsPage = new PostsPage({
     $target,
   });
 
@@ -20,29 +11,27 @@ export default function App({ $target }) {
     $target,
     initialState: {
       postId: "new",
-      title: "",
-      content: "",
+      post: {
+        title: "",
+        content: "",
+      },
     },
   });
 
   this.route = () => {
+    const { pathname } = window.location;
     $target.innerHTML = "";
 
-    const { pathname } = window.location;
-    console.log(pathname);
-
     if (pathname === "/") {
-      postPages.render();
-    } else if (pathname.includes("/posts/")) {
+      postsPage.setState();
+    } else if (pathname.indexOf("/posts/") === 0) {
       const [, , postId] = pathname.split("/");
+
       postEditPage.setState({ postId });
     }
   };
 
   this.route();
 
-  window.addEventListener("route-change", (nextUrl) => {
-    history.pushState(null, null, nextUrl);
-    this.route();
-  });
+  initRouter(() => this.route());
 }

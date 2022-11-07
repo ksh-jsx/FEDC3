@@ -1,4 +1,6 @@
-export default function PostList({ $target, initialState, onPostClick }) {
+import { push } from "./router.js";
+
+export default function PostList({ $target, initialState }) {
   const postListElement = document.createElement("div");
 
   postListElement.classList.add("post-list");
@@ -29,18 +31,11 @@ export default function PostList({ $target, initialState, onPostClick }) {
   this.render();
 
   postListElement.addEventListener("click", (e) => {
-    const $li = e.$target.closest("li");
-
+    const $li = e.target.closest("li");
+    console.log($li);
     if ($li) {
       const { id } = $li.dataset;
-
-      window.dispatchEvent(
-        new Event("route-change", {
-          detail: {
-            id,
-          },
-        })
-      );
+      push(`/posts/${id}`);
     }
   });
 }
