@@ -1,26 +1,29 @@
-import PostList from "./PostList";
-import { request } from "./api";
+import PostList from "./PostList.js";
+import { request } from "./api.js";
 
-export default function PostsPage({ $target }) {
-  const $page = document.createElement("div");
+export default function PostPages({ $target }) {
+  const $postPage = document.createElement("div");
+
+  $postPage.classList.add("post-pages");
 
   const postList = new PostList({
-    $target,
+    $target: $postPage,
     initialState: [],
   });
 
-  const $newPostButton = document.createElement("button");
-  $newPostButton.textContent = "New Post";
-  $page.appendChild($newPostButton);
+  const newPostButtonElement = document.createElement("button");
+
+  newPostButtonElement.innerText = "New Post";
+
+  $postPage.appendChild(newPostButtonElement);
 
   const fetchPosts = async () => {
     const posts = await request("/posts");
-
     postList.setState(posts);
   };
 
   this.render = async () => {
     await fetchPosts();
-    $target.appendChild($page);
+    $target.appendChild($postPage);
   };
 }

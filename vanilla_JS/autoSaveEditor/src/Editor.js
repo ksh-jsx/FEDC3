@@ -1,28 +1,36 @@
-export default function Editor({ $target, initialState = { title: "", content: "" }, onEditing }) {
+export default function Editor({
+  $target,
+  initialState = {
+    title: "",
+    content: "",
+  },
+  onEditing,
+}) {
+  let isInitialized = false;
   const $editor = document.createElement("div");
 
-  let isIsit = false;
-
-  this.state = initialState;
-
-  $editor.style.width = "600px";
-  $editor.style.height = "600px";
+  $editor.classList.add("editor");
 
   $target.appendChild($editor);
 
+  this.state = initialState;
+
   this.setState = (nextState) => {
     this.state = nextState;
+    $editor.querySelector("[name=title]").value = this.state.title;
+    $editor.querySelector("[name=content]").value = this.state.content;
+
     this.render();
   };
 
   this.render = () => {
-    if (!isIsit) {
+    if (!isInitialized) {
       $editor.innerHTML = `
-        <input type="text" name="title" style="width:600px" value="${this.state.title}"/>
-        <textarea name="content" style="width:600px;height:400px">${this.state.content}</textarea>
+        <input type="text" name="title" value="${this.state.title}" style="width:20rem" />
+        <textarea name="content" style="display:block; width:20rem; height:10rem">${this.state.content}</textarea>
       `;
 
-      isIsit = true;
+      isInitialized = true;
     }
   };
 
@@ -30,12 +38,12 @@ export default function Editor({ $target, initialState = { title: "", content: "
 
   $editor.addEventListener("keyup", (e) => {
     const { target } = e;
-    const name = target.getAttribute("name");
+    const nameValue = target.getAttribute("name");
 
-    if (this.state[name] !== undefined) {
+    if (this.state[nameValue] !== undefined) {
       const nextState = {
         ...this.state,
-        [name]: target.value,
+        [nameValue]: target.value,
       };
 
       this.setState(nextState);
