@@ -6,7 +6,7 @@ export default function PostPage({ $target, initialState }) {
   this.state = initialState;
 
   this.$div = document.createElement("div");
-  this.$div.className = "PostPage";
+  this.$div.className = "postPage";
 
   $target.appendChild(this.$div);
 
@@ -17,7 +17,21 @@ export default function PostPage({ $target, initialState }) {
 
   this.render = () => {
     this.$div.innerHTML = `
-      <div class="temp">hello world!</div>
+      <header>
+        <span class="header_title">${this.state.title}</span>
+        <div class="header_action_btns">
+          <button type="button">공유</button>
+          <button type="button">댓글</button>
+          <button type="button">시간</button>
+          <button type="button">별</button>
+          <button type="button">설정</button>
+        </div>
+      </header>
+      <setcion class="editor">
+        <h1 class="setction_title">${this.state.title}</h1>
+        <div class="setcion_content">${this.state.content ? this.state.content : "내용 없음"}</div>
+      </section>
     `;
   };
+  this.render();
 }

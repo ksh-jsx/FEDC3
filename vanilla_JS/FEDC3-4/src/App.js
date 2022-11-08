@@ -1,4 +1,5 @@
 import { request } from "./api.js";
+import { initRouter, push } from "./router.js";
 import PostPage from "./routes/PostPage.js";
 import SideBar from "./routes/SideBar.js";
 
@@ -9,26 +10,25 @@ export default function App({ $target }) {
 
   this.state = {
     isLoading: false,
-    titles: [],
-    targetTitle: [],
-    content: null,
+    res_doument:[],
+    res_content:[]
   };
 
-  this.setState = (nextState) => {
-    console.log(nextState);
+  this.setState = (nextState,isRenderSideBar=true) => {
     this.state = nextState;
-    postPage.setState(this.state);
-    sideBar.setState(this.state.titles);
+    console.log(nextState)
+    postPage.setState(this.state.res_content);
+    sideBar.setState(this.state,isRenderSideBar);
   };
 
   const sideBar = new SideBar({
     $target,
-    initialState: [],
+    initialState: this.state,
   });
 
   const postPage = new PostPage({
     $target,
-    initialState: [],
+    initialState: this.state,
   });
 
   this.init = async () => {
@@ -38,13 +38,14 @@ export default function App({ $target }) {
         isLoading: true,
       });
 
-      const res = await request("/");
-      console.log(res);
+      const res_doument = await request("/");
+      const rootId = res_doument[0].id
+      const res_content = await request(`/${rootId}`)
+
       this.setState({
         ...this.state,
-        titles: res.map((x) => x.title),
-        targetTitle: res[0].title,
-        content: res[0].content,
+        res_doument,
+        res_content
       });
     } catch (e) {
       console.error(e);
@@ -56,5 +57,21 @@ export default function App({ $target }) {
     }
   };
 
+  this.route = async() => {
+    const { pathname } = window.location;
+    if (pathname === "/") {
+      
+    } else if (pathname.indexOf("/posts/") === 0) {
+      const [, , postId] = pathname.split("/");
+      const res_content = await request(`/${postId}`);
+     
+      this.setState({
+        ...this.state,
+        res_content
+      },false)
+    }
+  };
+
   this.init();
+  initRouter(()=>this.route())
 }
