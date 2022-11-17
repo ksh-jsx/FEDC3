@@ -1,67 +1,68 @@
-import { push } from "../router";
+import SideBar_add from "../components/SideBar_add";
+import SideBar_interested from "../components/SideBar_interested";
+import SideBar_personal from "../components/SideBar_personal";
+import { getItem } from "../storage";
 
-export default function SideBar({ $target, initialState }) {
+export default function SideBar({ $target, initialState, onClickAdd }) {
   if (!new.target) {
     throw new Error("App 컴포넌트에 new 생성자가 필요합니다.");
   }
   this.state = initialState;
+  this.onClickAdd = onClickAdd;
 
   this.$sideBar = document.createElement("nav");
   this.$sideBar.className = "sideBar";
+  this.$sideBarChild = document.createElement("div"); //sidebar에서만 세로스크롤 하기 위해 내부 div로 한번 감싸줌
+  this.$sideBarChild.innerHTML = "<header><span>김성현의 Notion</span></header>";
+
+  this.$personal = document.createElement("div");
+  this.$personal.className = "classification";
+  this.$personal.id = "personal";
+
+  this.$interested = document.createElement("div");
+  this.$interested.className = "classification";
+  this.$interested.id = "interested";
+
+  this.$add = document.createElement("div");
+  this.$add.className = "sideBarAdd";
 
   $target.appendChild(this.$sideBar);
+  this.$sideBar.appendChild(this.$sideBarChild);
 
-  this.setState = (nextState, isRender) => {
+  this.setState = (nextState) => {
     this.state = nextState;
-    if(isRender){
-      this.render();
-    }
-  };
 
-  this.makeChildLi = ($nodes,depth=0) => {
-    return $nodes.map((res) => {
-      return `
-        <li class ="fold" data-id="${res.id}">
-          <span class="title" style="${this.state.res_content.id===res.id ? "font-weight:bold" : ""}"> ${res.title}</span>
-          ${res.documents.length ? `<ul class="depth${++depth}" style="display:none">${this.makeChildLi(res.documents,depth)}</ul>` : ""}
-        </li>
-      `;
-    }).join("");
-  }
+    sideBar_interested.setState(this.state);
+    sideBar_personal.setState(this.state);
+    this.render();
+  };
 
   this.render = () => {
-    this.$sideBar.innerHTML = `
-      <header>김성현의 Notion</header>
-      <ul class="depth0">${this.makeChildLi(this.state.res_doument)}</ul>
-    `
-  };
-  this.render();
-  this.$sideBar.addEventListener("click", (e) => {
-    e.stopImmediatePropagation();
-    const $li = e.target;
+    const favoritesList = getItem("favoritesList", []);
 
-    if($li){
-      if ($li.tagName ==="LI") {
-        const $ul = $li.childNodes[3]
-
-        if($ul && $ul.tagName === "UL"){
-          const targetStyle = $ul.style.display
-          const $targetClassName = $li.className
-
-          $ul.style.display = (targetStyle === "none" ? "block" : "none")
-          $li.className = `${$targetClassName==="fold" ? "unfold": "fold"}`
-        }
-      } else if($li.tagName ==="SPAN"){
-        const prev_id = this.state.res_content.id
-        const prev_node = document.querySelector(`li[data-id="${prev_id}"]`).childNodes[1]
-
-        prev_node.style.fontWeight = "normal"
-        $li.style.fontWeight = "bold"
-
-        const {id} = $li.closest("li").dataset;
-
-        push(`/posts/${id}`);
-      }
+    if (favoritesList.length) {
+      this.$sideBarChild.appendChild(this.$interested);
+    } else {
+      this.$sideBarChild.removeChild(this.$interested);
     }
-  })
+
+    this.$sideBarChild.appendChild(this.$personal);
+    this.$sideBarChild.appendChild(this.$add);
+  };
+
+  const sideBar_interested = new SideBar_interested({
+    $target: this.$interested,
+    initialState: this.state,
+  });
+
+  const sideBar_personal = new SideBar_personal({
+    $target: this.$personal,
+    initialState: this.state,
+    onClickAdd: this.onClickAdd,
+  });
+
+  new SideBar_add({
+    $target: this.$add,
+    onClickAdd: this.onClickAdd,
+  });
 }
