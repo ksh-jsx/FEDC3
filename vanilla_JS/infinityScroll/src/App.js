@@ -12,6 +12,7 @@ export default function App({ $target }) {
     limit: 5,
     nextstart: 0,
     photos: [],
+    totalCount: 0,
     isLoading: false,
   };
 
@@ -20,6 +21,7 @@ export default function App({ $target }) {
     photoListComponent.setState({
       isLoading: this.state.isLoading,
       photos: this.state.photos,
+      totalCount: this.state.totalCount,
     });
   };
 
@@ -28,6 +30,7 @@ export default function App({ $target }) {
     initialState: {
       isLoading: this.state.isLoading,
       photos: this.state.photos,
+      totalCount: this.state.totalCount,
     },
     onScrollEnded: async () => {
       await fetchPhotos();
@@ -55,5 +58,16 @@ export default function App({ $target }) {
     });
   };
 
-  fetchPhotos();
+  const initialize = async () => {
+    const totalCount = await request("/cat-photos/count");
+
+    this.setState({
+      ...this.state,
+      totalCount,
+    });
+
+    await fetchPhotos();
+  };
+
+  initialize();
 }
