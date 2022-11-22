@@ -1,6 +1,6 @@
 import Keyword from "./Keyword";
 
-export default function header({ $target, initialState, onKeywordInput }) {
+export default function header({ $target, initialState, onKeywordInput, onEnter }) {
   const $header = document.createElement("header");
   $header.className = "Header";
 
@@ -24,5 +24,6 @@ export default function header({ $target, initialState, onKeywordInput }) {
     $target: $header,
     initialState: { value: this.state.keyword },
     onKeywordInput,
+    onEnter,
   });
 }
