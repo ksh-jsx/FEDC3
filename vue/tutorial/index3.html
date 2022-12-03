@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <style>
+      .title {
+        font-size: 60px;
+        color: blue;
+      }
+      .active {
+        color: red !important;
+      }
+      .small {
+        font-size: 40px;
+      }
+      .title--small {
+        font-size: 30px;
+      }
+      .color--orange {
+        color: orange;
+      }
+    </style>
+    <div id="app">
+      <button @click="toggle">toggle</button>
+      <h1 :class="{ active: isActive,small: isSmall }" class="title">{{msg}}</h1>
+      <h1 :class="{ active,small }" class="title">{{msg}}</h1>
+      <!---이렇게 객체 이름 통일하면 생략도 가능함-->
+      <h1 :class="{ active,'title--small color--orange':small }" class="title">{{msg}}</h1>
+      <h1 :class="styleObject" class="title">{{msg}}</h1>
+      <!---""내부에 있는 것은 하나의 객체로 취급되기 때문에 이런식으로도 표현 가능-->
+    </div>
+    <script>
+      const App = {
+        data() {
+          return {
+            msg: "hello vue",
+            isActive: false,
+            isSmall: true,
+            active: false,
+            small: true,
+          };
+        },
+        computed: {
+          styleObject() {
+            return {
+              active: this.active,
+              "title--small color--orange": this.small,
+            };
+          },
+        },
+        methods: {
+          toggle() {
+            this.isActive = !this.isActive;
+            this.active = !this.active;
+          },
+        },
+      };
+
+      const app = Vue.createApp(App).mount("#app");
+    </script>
+  </body>
+</html>
