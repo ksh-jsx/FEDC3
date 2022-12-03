@@ -8,26 +8,27 @@
     <script src="https://unpkg.com/vue@next"></script>
   </head>
   <body>
-    <style>
-      .orange {
-        color: orange;
-      }
-    </style>
+    <style></style>
     <div id="app">
-      <div v-bind:class="{orange:active}">{{counter}}</div>
-      <button v-on:click="increase">click</button>
+      <fruit-item v-for="name in fruits" v-bind:fruit-name="name"></fruit-item>
     </div>
     <script>
+      const FruitItem = {
+        template: "<li>{{fruitName}}</li>",
+        props: ["fruitName"],
+      };
       const App = {
+        components: {
+          FruitItem,
+        },
         data() {
           return {
-            counter: 0,
-            active: true,
+            fruits: ["Apple", "Banana", "Cherry"],
           };
         },
         methods: {
-          increase() {
-            this.counter += 1;
+          toggle() {
+            this.active = !this.active;
           },
         },
       };

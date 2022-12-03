@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <style></style>
+    <div id="app">
+      <h2>{{fullName}}</h2>
+      <h2>{{f_name}}</h2>
+      <h2>{{l_name}}</h2>
+      <ul>
+        <button @click="capitalize">Capitalize</button>
+        <li v-for="fruit in fruits">{{ fruit.name }}</li>
+      </ul>
+    </div>
+    <script>
+      const FruitItem = {};
+      const App = {
+        data() {
+          return {
+            f_name: "jay",
+            l_name: "park",
+            fruits: [
+              { id: 1, name: "Apple" },
+              { id: 2, name: "Banana" },
+              { id: 3, name: "Cherry" },
+              { id: 4, name: "Mango" },
+            ],
+          };
+        },
+        watch: {
+          f_name() {},
+          fruits: {
+            handler() {
+              console.log(this.fruits);
+            },
+            deep: true,
+          },
+        },
+        computed: {
+          fullName: {
+            get() {
+              return this.f_name + " " + this.l_name;
+            },
+            set(newValue) {
+              const names = newValue.split(" ");
+              this.f_name = names[0];
+              this.l_name = names[1];
+            },
+          },
+        },
+        methods: {
+          capitalize() {
+            this.fruits.forEach((fruit) => {
+              fruit.name = fruit.name.toUpperCase();
+            });
+          },
+        },
+      };
+
+      const app = Vue.createApp(App).mount("#app");
+    </script>
+  </body>
+</html>
