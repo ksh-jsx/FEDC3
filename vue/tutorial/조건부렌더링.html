@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <style>
+      [v-clock] {
+        display: none;
+      }
+    </style>
+    <div id="app">
+      <div>
+        <h1 v-if="isShow">hello Vue!</h1>
+        <template v-else-if="{}">
+          <h2>elseif</h2>
+          <span>123</span>
+        </template>
+        <h2 v-else>else</h2>
+      </div>
+      <hr />
+      <div>
+        <button @click="toggle">Toggle!</button>
+        <h1 v-show="isShow2" v-cloak>{{msg}}</h1>
+        <!--
+          show같은 경우는 보이지 안더라고 일단 렌더링은 하는 것이니까 초기 렌더링 비용이 높음. 대신 css를 제어하는 것이기에 전환 비용은 낮다.
+          if는 이거랑 반대겠쥬?
+          근데 v-show는 css제어니까 순간적으로 보이게될 수 있으므로 "{{msg}}"잠깐 보일 수 있다. 그걸 방지하기 위해 v-cloak가 필요
+          --->
+      </div>
+      <hr />
+      <!---v-if와 v-for를 절대 동시에 사용하지 마라-->
+      <ul>
+        <li v-for="fruit in fruits">{{ fruit.name }}</li>
+        <!--<li v-for="user in users" v-if="user.isActive">{{ user.name }}</li>--><!--X-->
+
+        <template v-for="user in users" :key="user.id">
+          <li v-if="user.isActive">{{ user.name }}</li>
+        </template>
+      </ul>
+    </div>
+
+    <script>
+      const App = {
+        data() {
+          return {
+            msg: "Hello Vue!",
+            isShow: false,
+            isShow2: true,
+            users: [
+              { name: "kim", isActive: true },
+              { name: "lee", isActive: false },
+            ],
+            fruits: [
+              { id: 1, name: "Apple" },
+              { id: 2, name: "Banana" },
+              { id: 3, name: "Cherry" },
+              { id: 4, name: "Mango" },
+            ],
+          };
+        },
+        methods: {
+          toggle() {
+            this.isShow2 = !this.isShow2;
+          },
+        },
+      };
+
+      const app = Vue.createApp(App).mount("#app");
+    </script>
+  </body>
+</html>

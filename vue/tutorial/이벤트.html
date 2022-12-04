@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <style>
+      .parent {
+        width: 200px;
+        height: 100px;
+        background: blue;
+        color: #fff;
+      }
+      .child {
+        width: 150px;
+        height: 80px;
+        background: yellow;
+      }
+      .parent2 {
+        width: 200px;
+        height: 200px;
+        overflow: auto;
+        border: 4px solid;
+      }
+      .child2 {
+        font-size: 100px;
+      }
+    </style>
+    <div id="app">
+      <h1 @click.once="say($event,'hello')">{{msg}}</h1>
+      <div class="parent" @click.capture="log('parent')">
+        <!--.capture 이벤트 캡쳐 구현-->
+        parent
+        <div class="child" @click.stop="log('child')">child</div>
+        <!--.stop로 버블링 방지-->
+      </div>
+      <hr />
+      <div class="parent" @click.self="log('parent')">
+        <!--.self를 통해 자식은 클릭해도 무시-->
+        parent2
+        <div class="child">child2</div>
+      </div>
+      <hr />
+      <div class="parent2" @wheel.passive="wheel">
+        <!--.passive 렌더링과 로직을 구분하여 처리-->
+        <div v-for="n in 15" class="child2">{{n}}</div>
+      </div>
+    </div>
+    <script>
+      const App = {
+        data() {
+          return {
+            msg: "Vue!",
+          };
+        },
+        methods: {
+          say(e, msg) {
+            console.log(e);
+            console.log(msg);
+          },
+          log(msg) {
+            console.log(msg);
+          },
+          wheel() {
+            for (let i = 0; i < 10000; i++) {
+              console.log(i);
+            }
+          },
+        },
+      };
+
+      const app = Vue.createApp(App).mount("#app");
+    </script>
+  </body>
+</html>

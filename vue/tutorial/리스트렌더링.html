@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <style></style>
+    <div id="app">
+      <form @submit.prevent="addNewTodo">
+        <label for="">Add a todo</label>
+        <input v-model="newTodoText" id="new-todo" placeholder="E.g.feed the cat" />
+        <button>Add</button>
+      </form>
+      <ul>
+        <todo-item v-for="todo in todos" :key="todo.id" :todo="todo" @remove="removeTodo" />
+      </ul>
+    </div>
+    <script>
+      const generateId = () => {
+        return `${Date.now()}${Math.random()}`;
+      };
+      const TodoItem = {
+        template: `
+          <li>
+            {{ todo.title }}
+            <button @click="$emit('remove',todo.id)">remove</button>
+          </li>
+        `,
+        props: ["todo"],
+      };
+      const App = {
+        components: {
+          TodoItem,
+        },
+        data() {
+          return {
+            newTodoText: "",
+            todos: [],
+          };
+        },
+        methods: {
+          addNewTodo() {
+            this.todos.push({
+              id: generateId(),
+              title: this.newTodoText,
+            });
+            this.newTodoText = "";
+          },
+          removeTodo(todoId) {
+            this.todos = this.todos.filter((todo) => {
+              return todo.id !== todoId;
+            });
+          },
+        },
+      };
+
+      const vm = Vue.createApp(App).mount("#app");
+    </script>
+  </body>
+</html>
