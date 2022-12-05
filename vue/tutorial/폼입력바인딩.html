@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <style></style>
+    <div id="app">
+      <h1 style="white-space: pre-line">{{msg}}</h1>
+      <input :value="msg" @input="msg=$event.target.value" />
+      <br />
+      <input v-model="msg" />
+      <!--이거는 영어에서밖에 못씀-->
+      <hr />
+      <input type="checkbox" v-model="checked" checked />
+      <!--checked 무시됨-->
+      <textarea v-model="msg" @change="log"></textarea>
+      <hr />
+      <select v-model="selected">
+        <option vlaue="">하나를 선택하세요</option>
+        <option v-for="fruit in fruits" :key="fruit.value" :value="fruit.value">
+          {{fruit.text}}
+        </option>
+      </select>
+    </div>
+    <script>
+      const App = {
+        data() {
+          return {
+            msg: "hello Vue",
+            checked: false,
+            selected: "banana",
+            fruits: [
+              { text: "바나나", value: "banana" },
+              { text: "사과", value: "apple" },
+              { text: "체리", value: "cherry" },
+            ],
+          };
+        },
+        watch: {
+          checked(newVal) {
+            console.log(newVal);
+          },
+          selected(newVal) {
+            console.log(newVal);
+          },
+        },
+        methods: {
+          log() {
+            console.log(this.msg);
+          },
+        },
+      };
+
+      const app = Vue.createApp(App).mount("#app");
+    </script>
+  </body>
+</html>
