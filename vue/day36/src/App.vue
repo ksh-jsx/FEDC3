@@ -1,33 +1,20 @@
 <template>
   <div>
-    <button @click="reverseMsg">Click!</button>
-    <Hello :message="msg" name="hello" />
+    <!---<Day36 />--->
+    <Day37 />
   </div>
 </template>
 
 <script>
-import Hello from "./components/Hello.vue";
+import Day36 from "./components/day36/Day36.vue";
+import Day37 from "./components/day37/Day37.vue";
 
 export default {
   components: {
-    Hello,
-  },
-  data() {
-    return {
-      msg: "Hello Vue!",
-    };
-  },
-  methods: {
-    reverseMsg() {
-      this.msg = this.msg.split("").reverse().join("");
-    },
+    Day36,
+    Day37,
   },
 };
 </script>
 
-<style scoped>
-h1 {
-  background: red;
-  color: #fff;
-}
-</style>
+<style scoped></style>
