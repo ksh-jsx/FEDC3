@@ -1,4 +1,9 @@
 import { useState } from "react";
+import { css } from "@emotion/react";
+
+const style = css`
+  color: hotpink;
+`;
 
 const Pagination = ({ defaultPage, limit, total, onChange }) => {
   const [page, setPage] = useState(defaultPage);
@@ -17,6 +22,7 @@ const Pagination = ({ defaultPage, limit, total, onChange }) => {
           key={i}
           style={{ backgroundColor: page === i ? "red" : undefined }}
           onClick={() => handleCahngePage(i)}
+          css={style}
         >
           {i + 1}
         </button>
