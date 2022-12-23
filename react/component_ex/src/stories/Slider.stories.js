@@ -22,7 +22,7 @@ export const VolumeControl = (args) => {
   return (
     <Spacer>
       <Icon name="volume" />
-      <Slider style={{ width: 100, display: "inline-block" }} />
+      <Slider style={{ width: 100, display: "inline-block" }} {...args} />
       <Icon name="volume-2" />
     </Spacer>
   );

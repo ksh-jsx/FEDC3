@@ -66,6 +66,8 @@ function App() {
       <br />
       {isHover ? "hover" : "mouseOut"}
       <div ref={ref} style={{ width: "100px", height: "100px", backgroundColor: "blue" }}></div>
+
+      <hr />
     </div>
   );
 }

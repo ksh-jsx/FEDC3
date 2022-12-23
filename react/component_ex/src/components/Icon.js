@@ -5,7 +5,7 @@ const IconWrapper = styled.i`
   display: inline-block;
 `;
 
-const Icon = ({ name, size, rotate, strokeWidth, color, ...props }) => {
+const Icon = ({ name, size, rotate, strokeWidth, color = "#000", ...props }) => {
   const shapeStyle = {
     width: size,
     height: size,
