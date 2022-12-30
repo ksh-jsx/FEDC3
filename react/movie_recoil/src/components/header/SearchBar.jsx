@@ -2,45 +2,26 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { keywordState } from "../../utils/store/keywordState";
-import { moviesState } from "../../utils/store/moviesState";
 import { checkLanguage } from "../../utils/validations";
-import { request } from "../../utils/fetch";
+import useFetch from "../../hooks/useFetch";
 
 const SearchBar = () => {
   const [tempKeyword, setTempKeyword] = useState("");
   const setKeyword = useSetRecoilState(keywordState);
-  const setMovieData = useSetRecoilState(moviesState);
-
-  const fetchMovies = async (keyword) => {
-    try {
-      const res = await request(`s=${keyword}&page=1`);
-
-      if (res.Response === "True") {
-        const movies = res.Search.map((data) => {
-          const Poster = data.Poster.replace("SX300", "SX700");
-          return { ...data, Poster };
-        });
-
-        setMovieData({
-          movies,
-          totalResults: Number(res.totalResults),
-        });
-      } else {
-        console.log("영화없음");
-      }
-    } catch (e) {
-      throw new Error(`${e.message}`);
-    }
-  };
+  const { fetchMovies } = useFetch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (checkLanguage(tempKeyword)) {
-      setKeyword(tempKeyword);
-      fetchMovies(tempKeyword);
+    if (tempKeyword.length > 1) {
+      if (checkLanguage(tempKeyword)) {
+        setKeyword(tempKeyword);
+        fetchMovies(tempKeyword);
+      } else {
+        setTempKeyword("");
+      }
     } else {
-      setTempKeyword("");
+      alert("1글자이상 입력하셈");
     }
   };
 

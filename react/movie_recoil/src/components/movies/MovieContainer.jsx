@@ -1,26 +1,32 @@
 import styled from "@emotion/styled";
+import Loading from "../Loading";
 import Movie from "./Movie";
-import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
-import { keywordState } from "../../utils/store/keywordState";
 import { moviesState } from "../../utils/store/moviesState";
+import { settingState } from "../../utils/store/settingState";
+import Modal from "./Modal";
 
 const MovieContainer = () => {
-  const key = useRecoilValue(keywordState);
   const { movies } = useRecoilValue(moviesState);
-
-  useEffect(() => {
-    console.log(key);
-    console.log(movies);
-  }, [key, movies]);
+  const { isLoading } = useRecoilValue(settingState);
 
   return (
     <Section>
-      <MoviesContainer>
-        {movies.map((movie) => (
-          <Movie movie={movie} key={movie.imdbID} />
-        ))}
-      </MoviesContainer>
+      {isLoading && <Loading />}
+      {movies.length > 0 ? (
+        <MoviesContainer>
+          {movies.map((movie) => (
+            <Movie movie={movie} key={movie.imdbID} />
+          ))}
+        </MoviesContainer>
+      ) : (
+        <NoResult>
+          Nothing!
+          <br />
+          Search For A Movie
+        </NoResult>
+      )}
+      <Modal />
     </Section>
   );
 };
@@ -39,4 +45,12 @@ const MoviesContainer = styled.div`
   min-height: 500px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+`;
+
+const NoResult = styled.div`
+  color: var(--gray);
+  font-size: 30px;
+  padding-top: 100px;
+  text-align: center;
+  line-height: 150%;
 `;

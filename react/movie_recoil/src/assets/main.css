@@ -36,3 +36,32 @@ input:focus {
 .scroll-lock {
   overflow: hidden;
 }
+
+@media (max-width: 1450px) {
+  section .movies {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+@media (max-width: 1200px) {
+  section .movies {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+@media (max-width: 900px) {
+  section .movies {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 600px) {
+  section .movies {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 450px) {
+  section {
+    min-height: calc(100vh - 181px);
+  }
+  section .movies {
+    grid-template-columns: 1fr;
+  }
+}

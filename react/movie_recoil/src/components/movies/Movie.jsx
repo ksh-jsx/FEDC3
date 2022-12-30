@@ -1,19 +1,24 @@
 import styled from "@emotion/styled";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { settingState } from "../../utils/store/settingState";
+import { familyState } from "../../utils/store/familyState";
 
 const Movie = ({ movie }) => {
-  console.log(movie);
+  const [setting, setSetting] = useRecoilState(settingState);
+  const family = useRecoilValue(familyState(movie.imdbID));
+
   return (
-    <Card>
+    <Card onClick={() => setSetting({ ...setting, isModalOn: true, targetMovieId: movie.imdbID })}>
       <Poster>
-        {movie.Poster !== "'N/A" ? (
+        {movie.Poster !== "N/A" ? (
           <img src={movie.Poster} alt="poster" />
         ) : (
-          <div class="noPoster">No Poster</div>
+          <NoPoster>No Poster</NoPoster>
         )}
       </Poster>
       <Info>
-        <Title class="title">{movie.Title}</Title>
-        <Year class="year">개봉 : {movie.Year}년</Year>
+        <Title>{family.name ? family.name : movie.Title}</Title>
+        <Year>개봉 : {movie.Year}년</Year>
       </Info>
     </Card>
   );
@@ -39,7 +44,15 @@ const Poster = styled.div`
     border-radius: 8px 8px 0 0;
   }
 `;
-
+const NoPoster = styled.div`
+  color: var(--gray);
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+`;
 const Info = styled.div`
   height: 100px;
   display: flex;
