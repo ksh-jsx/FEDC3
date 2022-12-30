@@ -1,15 +1,17 @@
 import styled from "@emotion/styled";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { settingState } from "../../utils/store/settingState";
 import { familyState } from "../../utils/store/familyState";
+import { moviesState } from "../../utils/store/moviesState";
 
 const Modal = () => {
-  const [setting, setSetting] = useRecoilState(settingState);
-  const [family, setFamily] = useRecoilState(familyState(setting.targetMovieId));
+  const { targetMovieId } = useRecoilValue(moviesState);
+  const [setting, setSetting] = useRecoilState(settingState("isModalOn"));
+  const [family, setFamily] = useRecoilState(familyState(targetMovieId));
 
   return (
     <>
-      {setting.isModalOn && (
+      {setting && (
         <ModalContainer>
           <ModalInner>
             id:
@@ -21,10 +23,7 @@ const Modal = () => {
               onChange={(e) => setFamily({ ...family, name: e.target.value })}
               placeholder="새로운 영화이름을 적으세요"
             />
-            <button
-              onClick={() => setSetting({ ...setting, isModalOn: false, targetMovieId: null })}
-              style={{ marginTop: 30 }}
-            >
+            <button onClick={() => setSetting(false)} style={{ marginTop: 30 }}>
               x
             </button>
           </ModalInner>

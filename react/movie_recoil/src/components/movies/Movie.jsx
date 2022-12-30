@@ -1,14 +1,23 @@
 import styled from "@emotion/styled";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { settingState } from "../../utils/store/settingState";
+import { moviesState } from "../../utils/store/moviesState";
 import { familyState } from "../../utils/store/familyState";
 
 const Movie = ({ movie }) => {
-  const [setting, setSetting] = useRecoilState(settingState);
+  //const [setting, setSetting] = useRecoilState(settingState);
+  const setSetting = useSetRecoilState(settingState("isModalOn"));
+  const [movies, setMovies] = useRecoilState(moviesState);
   const family = useRecoilValue(familyState(movie.imdbID));
 
+  const onClickHandler = () => {
+    //setSetting({ ...setting, isModalOn: true });
+    setSetting(true);
+    setMovies({ ...movies, targetMovieId: movie.imdbID });
+  };
+
   return (
-    <Card onClick={() => setSetting({ ...setting, isModalOn: true, targetMovieId: movie.imdbID })}>
+    <Card onClick={() => onClickHandler()}>
       <Poster>
         {movie.Poster !== "N/A" ? (
           <img src={movie.Poster} alt="poster" />

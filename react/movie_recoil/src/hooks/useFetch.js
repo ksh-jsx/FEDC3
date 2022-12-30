@@ -5,11 +5,13 @@ import { request } from "../utils/fetch";
 
 const useFetch = () => {
   const setMovieData = useSetRecoilState(moviesState);
-  const [setting, setSetting] = useRecoilState(settingState);
+  //const [setting, setSetting] = useRecoilState(settingState);
+  const setSetting = useSetRecoilState(settingState("isLoading"));
 
   const fetchMovies = async (keyword) => {
     try {
-      setSetting({ ...setting, isLoading: true });
+      //setSetting({ ...setting, isLoading: true });
+      setSetting(true);
       const res = await request(`s=${keyword}&page=1`);
 
       if (res.Response === "True") {
@@ -25,7 +27,8 @@ const useFetch = () => {
       } else {
         console.log("영화없음");
       }
-      setSetting({ ...setting, isLoading: false });
+      //setSetting({ ...setting, isLoading: false });
+      setSetting(false);
     } catch (e) {
       throw new Error(`${e.message}`);
     }
