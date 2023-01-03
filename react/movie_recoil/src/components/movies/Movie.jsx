@@ -1,19 +1,19 @@
 import styled from "@emotion/styled";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { settingState } from "../../utils/store/settingState";
 import { moviesState } from "../../utils/store/moviesState";
-import { familyState } from "../../utils/store/familyState";
+import useFetch from "../../hooks/useFetch";
 
 const Movie = ({ movie }) => {
   //const [setting, setSetting] = useRecoilState(settingState);
   const setSetting = useSetRecoilState(settingState("isModalOn"));
   const [movies, setMovies] = useRecoilState(moviesState);
-  const family = useRecoilValue(familyState(movie.imdbID));
-
+  const { fetchMovieDetail } = useFetch(movie.imdbID);
   const onClickHandler = () => {
     //setSetting({ ...setting, isModalOn: true });
     setSetting(true);
     setMovies({ ...movies, targetMovieId: movie.imdbID });
+    fetchMovieDetail();
   };
 
   return (
@@ -26,7 +26,7 @@ const Movie = ({ movie }) => {
         )}
       </Poster>
       <Info>
-        <Title>{family.name ? family.name : movie.Title}</Title>
+        <Title>{movie.Title}</Title>
         <Year>개봉 : {movie.Year}년</Year>
       </Info>
     </Card>

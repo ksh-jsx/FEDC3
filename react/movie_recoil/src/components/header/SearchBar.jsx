@@ -8,6 +8,7 @@ import useFetch from "../../hooks/useFetch";
 const SearchBar = () => {
   const [tempKeyword, setTempKeyword] = useState("");
   const setKeyword = useSetRecoilState(keywordState);
+
   const { fetchMovies } = useFetch();
 
   const handleSubmit = (e) => {
