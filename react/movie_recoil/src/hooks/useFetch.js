@@ -1,4 +1,4 @@
-import { useSetRecoilState } from "recoil";
+import { useRecoilState,useSetRecoilState } from "recoil";
 import { moviesState } from "../utils/store/moviesState";
 import { movieDetailState } from "../utils/store/movieDetailState";
 import { settingState } from "../utils/store/settingState";
@@ -6,7 +6,7 @@ import { request } from "../utils/fetch";
 
 const useFetch = (id = null) => {
   const setMovieData = useSetRecoilState(moviesState);
-  const setMovieDetailData = useSetRecoilState(movieDetailState(id));
+  const [detailData,setMovieDetailData] = useRecoilState(movieDetailState(id));
   //const [setting, setSetting] = useRecoilState(settingState);
   const setSetting = useSetRecoilState(settingState("isLoading"));
 
@@ -37,13 +37,14 @@ const useFetch = (id = null) => {
   };
   const fetchMovieDetail = async () => {
     try {
+      console.log(detailData)
       setSetting(true);
       const res = await request(`i=${id}&plot=full`);
 
       if (res.Response === "True") {
         const Poster = res.Poster.replace("SX300", "SX700");
 
-        setMovieDetailData({ ...res, Poster });
+        setMovieDetailData({id,movie:{ ...res, Poster }});
       } else {
         console.log("영화없음");
       }

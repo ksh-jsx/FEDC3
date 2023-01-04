@@ -7,25 +7,26 @@ import { moviesState } from "../../utils/store/moviesState";
 const Modal = () => {
   const { targetMovieId } = useRecoilValue(moviesState);
   const [setting, setSetting] = useRecoilState(settingState("isModalOn"));
-  const family = useRecoilValue(movieDetailState(targetMovieId));
+  const movie = useRecoilValue(movieDetailState(targetMovieId));
+
   return (
     <>
       {setting && (
         <ModalContainer>
-          <ModalInner style={{ backgroundImage: family.Poster && `url(${family.Poster})` }}>
+          <ModalInner style={{ backgroundImage: movie.Poster && `url(${movie.Poster})` }}>
             <Close onClick={() => setSetting(false)}>X</Close>
             <MovieStoreDatas>
-              <Title>{family.Title}</Title>
+              <Title>{movie.Title}</Title>
               <EtcMovieStoreDatas>
-                {family.Year} · {family.Runtime} · {family.Rated} ·&nbsp;
-                <Img src={require("../../assets/star.png")} alt="star" /> {family.imdbRating}
+                {movie.Year} · {movie.Runtime} · {movie.Rated} · &nbsp;
+                <Img src={require("../../assets/star.png")} alt="star" /> {movie.imdbRating}
               </EtcMovieStoreDatas>
-              <Plot>{family.Plot}</Plot>
+              <Plot>{movie.Plot}</Plot>
               <div>
-                Actors: <Gray>{family.Actors}</Gray>
+                Actors: <Gray>{movie.Actors}</Gray>
               </div>
               <div>
-                Directors: <Gray>{family.Director}</Gray>
+                Directors: <Gray>{movie.Director}</Gray>
               </div>
             </MovieStoreDatas>
           </ModalInner>

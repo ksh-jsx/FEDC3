@@ -9,6 +9,7 @@ import Modal from "./Modal";
 const MovieContainer = () => {
   const { movies } = useRecoilValue(moviesState);
   const isLoading = useRecoilValue(settingState("isLoading"));
+  const setting = useRecoilValue(settingState("isModalOn"));
 
   return (
     <Section>
@@ -26,7 +27,7 @@ const MovieContainer = () => {
           Search For A Movie
         </NoResult>
       )}
-      <Modal />
+      {setting && <Modal />}
     </Section>
   );
 };
