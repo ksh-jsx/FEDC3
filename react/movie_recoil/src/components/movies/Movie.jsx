@@ -8,12 +8,12 @@ const Movie = ({ movie }) => {
   //const [setting, setSetting] = useRecoilState(settingState);
   const setSetting = useSetRecoilState(settingState("isModalOn"));
   const [movies, setMovies] = useRecoilState(moviesState);
-  const { fetchMovieDetail } = useFetch(movie.imdbID);
+  //const { fetchMovieDetail } = useFetch(movie.imdbID);
   const onClickHandler = () => {
     //setSetting({ ...setting, isModalOn: true });
     setSetting(true);
     setMovies({ ...movies, targetMovieId: movie.imdbID });
-    fetchMovieDetail();
+    //fetchMovieDetail();
   };
 
   return (

@@ -5,6 +5,6 @@ export const moviesState = atom({
   default: {
     movies: [],
     totalResults: 0,
-    targetMovieId: "t12345",
+    targetMovieId: "",
   },
 });

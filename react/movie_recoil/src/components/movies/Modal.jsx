@@ -4,14 +4,16 @@ import { settingState } from "../../utils/store/settingState";
 import { movieDetailState } from "../../utils/store/movieDetailState";
 import { moviesState } from "../../utils/store/moviesState";
 
+
 const Modal = () => {
   const { targetMovieId } = useRecoilValue(moviesState);
   const [setting, setSetting] = useRecoilState(settingState("isModalOn"));
+  console.log('z')
   const movie = useRecoilValue(movieDetailState(targetMovieId));
 
   return (
     <>
-      {setting && (
+      {movie && (
         <ModalContainer>
           <ModalInner style={{ backgroundImage: movie.Poster && `url(${movie.Poster})` }}>
             <Close onClick={() => setSetting(false)}>X</Close>

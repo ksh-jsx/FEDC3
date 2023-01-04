@@ -16,15 +16,17 @@ export const movieDetailState = selectorFamily({
   get:
     (id) =>
     async({ get }) => {
-      const res = await request(`i=${id}&plot=full`);
+      if(id){
+        const res = await request(`i=${id}&plot=full`);
+        console.log(res)
+        if (res.Response === "True") {
+          const Poster = res.Poster.replace("SX300", "SX700");
 
-      if (res.Response === "True") {
-        const Poster = res.Poster.replace("SX300", "SX700");
-
-        return({ ...res, Poster });
-      } else {
-        console.log("영화없음");
-        return {}
+          return({ ...res, Poster });
+        } else {
+          console.log("영화정보없음");
+          return {}
+        }
       }
     },
 });

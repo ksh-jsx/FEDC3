@@ -25,6 +25,7 @@ const useFetch = (id = null) => {
         setMovieData({
           movies,
           totalResults: Number(res.totalResults),
+          targetMovieId:""
         });
       } else {
         console.log("영화없음");
@@ -37,7 +38,6 @@ const useFetch = (id = null) => {
   };
   const fetchMovieDetail = async () => {
     try {
-      console.log(detailData)
       setSetting(true);
       const res = await request(`i=${id}&plot=full`);
 
@@ -46,7 +46,7 @@ const useFetch = (id = null) => {
 
         setMovieDetailData({id,movie:{ ...res, Poster }});
       } else {
-        console.log("영화없음");
+        console.log("영화정보없음");
       }
       //setSetting({ ...setting, isLoading: false });
       setSetting(false);
