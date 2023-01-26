@@ -1,0 +1,67 @@
+:root {
+  --primary: #1f2937; /* var(--primary)   */
+  --secodary: #374151; /* var(--secodary)   */
+  --highlight: #89ddff; /* var(--highlight)   */
+  --primary: #292d3e; /* var(--primary)   */
+  --dark: #333333; /* var(--dark100)   */
+  --gray: #9ca3af; /* var(--gray)    */
+  --white: #fff; /* var(--white)    */
+}
+
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Pretendard-Regular";
+  letter-spacing: 1px;
+}
+#root {
+  background: var(--primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input:focus {
+  outline: none;
+}
+
+.scroll-lock {
+  overflow: hidden;
+}
+
+@media (max-width: 1450px) {
+  section .movies {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+@media (max-width: 1200px) {
+  section .movies {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+@media (max-width: 900px) {
+  section .movies {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 600px) {
+  section .movies {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 450px) {
+  section {
+    min-height: calc(100vh - 181px);
+  }
+  section .movies {
+    grid-template-columns: 1fr;
+  }
+}

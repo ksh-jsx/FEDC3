@@ -34,8 +34,8 @@ for (let i = 0; i < numbers.length; i++) {
 }
 
 //해결법3: forEach 사용: numbers를 순회하면서 각각 function을 만들기 때문에 i의 값이 고유해짐
-numbers.forEacth(function (number, i) {
+numbers.forEach(function (number, i) {
   setTimeout(function () {
-    console.log(`[${i}] number ${numbers[i]} turn`);
+    console.log(`[${i}] number ${number} turn`);
   }, i * 1000);
 });
