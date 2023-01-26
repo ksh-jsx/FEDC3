@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <p>svg로 도형 그리기</p>
+    <!---D3은 SVG로 이뤄진다-->
+    <!---D3의 선, 면, 그래프 속성 하나하나가 SVG 요소들을 호라용해서 만들어진다-->
+    <!---따라서 앞으로 간단하게 SVG속성들을 배우고 막대차트를 만들어보자-->
+
+    <svg width="500px" height="500px">
+      <!--원-->
+      <circle cx="100" cy="50" r="20" />
+
+      <!--타원-->
+      <ellipse cx="50" cy="50" rx="20" ry="40" />
+
+      <!--모서리가 둥근 직사각형-->
+      <rect x="120" y="0" width="100" height="50" rx="10" ry="10" />
+
+      <!--다각형-->
+      <polygon points="200,200 50,150 250,150" />
+
+      <!--선-->
+      <line x1="300" y1="0" x2="500" y2="50" stroke="black" />
+
+      <!--path-->
+      <path d="M 0 50 q 50 -50 100 0 l 100 0" />
+      <!--참고 링크 : https://developer.mozilla.org/ko/docs/Web/SVG/Tutorial/paths-->
+
+      <!--문자-->
+      <text x="100" y="250" font-size="20">svg text</text>
+    </svg>
+  </body>
+</html>
