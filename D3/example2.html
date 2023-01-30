@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .linecap-demo {
+        stroke: darkmagenta;
+        stroke-width: 5;
+      }
+      text.ex3 {
+        text-anchor: middle;
+        fill: lightgray;
+      }
+      rect.ex3 {
+        fill: crimson;
+        opacity: 0.5;
+      }
+      .blue-group {
+        fill: blue;
+        stroke-width: 3;
+      }
+      .red-group {
+        fill: red;
+        stroke-width: 3;
+      }
+      .green-group {
+        fill: green;
+        stroke-width: 3;
+        fill-opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body>
+    <p>코드 작성</p>
+    <!---D3은 SVG로 이뤄진다-->
+    <!---D3의 선, 면, 그래프 속성 하나하나가 SVG 요소들을 호라용해서 만들어진다-->
+    <!---따라서 앞으로 간단하게 SVG속성들을 배우고 막대차트를 만들어보자-->
+
+    <svg width="1000px" height="1000px">
+      <circle cx="100" cy="50" r="20" fill="darkmagenta" />
+
+      <circle cx="100" cy="150" r="40" fill="rgba(0,0,255,0.5)" />
+      <circle cx="50" cy="150" r="40" fill="rgba(0,0,255)" opacity="0.5" />
+
+      <!---선들의 종류---->
+      <text x="0" y="220" font-weight="bold">Line caps</text>
+
+      <text x="0" y="250" font-weight="bold">Butt</text>
+      <line x1="60" y1="245" x2="200" y2="245" class="linecap-demo" stroke-linecap="butt"></line>
+
+      <text x="0" y="280" font-weight="bold">Round</text>
+      <line x1="60" y1="275" x2="200" y2="275" class="linecap-demo" stroke-linecap="round"></line>
+
+      <text x="0" y="310" font-weight="bold">Square</text>
+      <line x1="60" y1="305" x2="200" y2="305" class="linecap-demo" stroke-linecap="square"></line>
+
+      <!---선언되는 순서에 따라 그려짐을 알 수 있다-->
+      <text x="100" y="435" class="ex3">Text on bottom</text>
+      <rect x="0" y="400" width="200" height="60" class="ex3" />
+
+      <rect x="250" y="400" width="200" height="60" class="ex3" />
+      <text x="350" y="435" class="ex3">Text on bottom</text>
+
+      <!---g태그를 사용해 그룹화하자--->
+      <g class="blue-group" transform="scale(1.2)">
+        <text x="0" y="520">blue group</text>
+        <rect x="0" y="540" width="50" height="50" rx="10" ry="10" />
+        <polygon points="80,530 70,570, 130,550" />
+        <line x1="60" y1="575" x2="120" y2="590" stroke="blue" />
+      </g>
+      <g class="red-group" transform="translate(200)">
+        <text x="0" y="520">red group</text>
+        <rect x="0" y="540" width="50" height="50" rx="10" ry="10" />
+        <polygon points="80,530 70,570, 130,550" />
+        <line x1="60" y1="575" x2="120" y2="590" stroke="red" />
+      </g>
+      <g class="green-group" transform="translate(200,120)">
+        <text x="0" y="520">green group</text>
+        <rect x="0" y="540" width="50" height="50" rx="10" ry="10" />
+        <polygon points="80,530 70,570, 130,550" />
+        <line x1="60" y1="575" x2="120" y2="590" stroke="green" />
+      </g>
+    </svg>
+  </body>
+</html>
