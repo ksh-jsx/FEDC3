@@ -30,6 +30,14 @@
       .axis-label {
         text-anchor: middle;
       }
+      .button{
+        float:left;
+        margin-left:10px;
+        cursor:pointer
+      }
+      .selected{
+        font-weight: bold;
+      }
     </style>
   </head>
   <body>
@@ -66,9 +74,14 @@
         //     value: 8021290,
         //   },
         // ];
-        const data = await d3.json("./data_74/movie.json");
-        const nameList = data.map((d) => d.name);
-        const valueList = data.map((d) => d.value);
+        const data = await d3.json("./data_74/movie2.json");
+        let year = '2019'
+        let selectedDate = data.filter(el=>el.year === year)
+
+        const nameList = selectedDate.map((d) => d.name);
+        const valueList = selectedDate.map((d) => d.value);
+        const years = ['2020','2019','2018','2017','2016','2015']
+        const title = '년 1000만 관객 기록한 영화 관객수 TOP7';
 
         const margin = { top: 30, right: 50, bottom: 0, left: 150 };
         const width = 400;
@@ -76,7 +89,7 @@
 
         const x = d3
           .scaleLinear()
-          .domain([0, d3.max(data, (d) => d.value)])
+          .domain([0, d3.max(selectedDate, (d) => d.value)])
           .range([0, width]);
 
         const xAxis = d3
@@ -90,7 +103,19 @@
 
         const body = d3.select("body");
 
-        body.append("h2").text("2019년 1000만 관객 기록한 영화 관객수 TOP7");
+        body.append("h2").text(year+title);
+
+        
+        const button = body.append('div').attr('class','buttons-container').selectAll('div').data(years).join('div').text(d=>d)
+          .attr('class', d=>{
+            if(d===year){
+              return 'button selected'
+            }
+            else {
+              return 'button'
+            }
+          })
+
         body.append("div").attr("class", "top-label movie-label").append("p").text("영화");
         body.append("div").attr("class", "top-label").append("p").text("관객수");
         body.append("div").attr("class", "clearfix");
@@ -118,9 +143,9 @@
         //     .attr("width", value);
         // });
 
-        barGroup
+        const bars = barGroup
           .selectAll("rect")
-          .data(data)
+          .data(selectedDate)
           .join("rect")
           .attr("x", 0)
           .attr("y", (d, i) => y(d.name))
@@ -192,6 +217,27 @@
         //   })
         //   .attr("y", tickGap + tickHeight)
         //   .text((d, i) => `${!!d ? Math.floor(d / 10000) : d}만명`);
+
+        button.on('click',function(el,d){
+          d3.select('.selected').classed('selected',false);
+          d3.select(this).classed('selected',true);
+
+          year = d
+          selectedDate = data.filter(el=>el.year === year)
+
+          y.domain(selectedDate.map(d=>d.name));
+          const yAxis = d3.axisLeft(y);
+          svgGroup.selectAll('g.y-axis').call(yAxis);
+          bars.data(selectedDate)
+            .transition()
+            //.duration(500)
+            //.delay(500)
+            .ease(d3.easeBounce) //easeBack,easeLinear도 있음
+            .attr('y',d=>y(d.name))
+            .attr('width',d=>x(d.value))
+
+          body.selectAll('h2').text(year+title)
+        })
       }
 
       makeChart();
