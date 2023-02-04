@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>막대차트</title>
+    <style>
+      .first-chart {
+        fill: steelblue;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <div id="header">
+      <p>2015~2020년 영화 TOP7 관객수(막대)</p>
+    </div>
+    <script>
+      async function getData() {
+        const json = await d3.json("./data_77/movie.json");
+        return json;
+      }
+
+      async function makeChart() {
+        const data = await getData();
+
+        const names = data.reduce((acc, cur) => {
+          acc.push(cur.name);
+          const s = new Set(acc);
+          return Array.from(s);
+        }, []);
+
+        const margin = { top: 10, right: 50, bottom: 30, left: 50 };
+        const width = 800 - margin.left - margin.right;
+        const height = 300 - margin.top - margin.bottom;
+
+        const body = d3.select("body");
+        const svg = body
+          .append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .attr("class", "first-chart");
+
+        const xScale = d3
+          .scaleBand()
+          .domain(names)
+          .range([margin.left, width - margin.right]);
+
+        const yScale = d3
+          .scaleLinear()
+          .domain([0, d3.max(data, (d) => d.value)])
+          .range([height - margin.bottom, margin.top]);
+
+        const xAxis = d3.axisBottom(xScale);
+        const yAxis = d3.axisLeft(yScale);
+
+        const chart = svg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
+        chart
+          .append("g")
+          .attr("transform", `translate(0,${height - margin.bottom})`)
+          .call(xAxis);
+        chart.append("g").attr("transform", `translate(${margin.left},0)`).call(yAxis);
+
+        chart
+          .append("g")
+          .selectAll("rect")
+          .data(data)
+          .join("rect")
+          .attr("x", (d) => xScale(d.name))
+          .attr("y", (d) => yScale(d.value))
+          .attr("width", xScale.bandwidth() - 10)
+          .attr("height", (d) => yScale(0) - yScale(d.value));
+      }
+
+      async function getData2() {
+        const json = await d3.json("./data_77/sample.json");
+        return json.sort((a, b) => a.year - b.year);
+      }
+
+      async function makeChart2() {
+        const data = await getData2();
+
+        const years = data.reduce((acc, cur) => {
+          acc.push(cur.year);
+          const s = new Set(acc);
+          return Array.from(s);
+        }, []);
+
+        const names = data.reduce((acc, cur) => {
+          acc.push(cur.name);
+          const s = new Set(acc);
+          return Array.from(s);
+        }, []);
+
+        const margin = { top: 30, right: 50, bottom: 30, left: 50 };
+        const width = 800 - margin.left - margin.right;
+        const height = 300 - margin.top - margin.bottom;
+
+        const body = d3.select("body");
+        const svg = body
+          .append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom);
+
+        const xScale1 = d3
+          .scaleBand()
+          .domain(years)
+          .range([margin.left, width - margin.right])
+          .paddingInner(0.1);
+
+        const xScale2 = d3
+          .scaleBand()
+          .domain(names)
+          .range([0, xScale1.bandwidth()])
+          .paddingInner(0.1);
+
+        const yScale = d3
+          .scaleLinear()
+          .domain([0, d3.max(data, (d) => d.value)])
+          .range([height - margin.bottom, margin.top]);
+
+        const colorScale = d3.scaleOrdinal().domain(names).range(d3.schemePastel1);
+
+        const xAxis = d3.axisBottom(xScale1).tickSizeOuter(0);
+        const yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
+
+        const chart = svg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+        chart
+          .append("g")
+          .attr("transform", `translate(0,${height - margin.bottom})`)
+          .call(xAxis);
+        chart.append("g").attr("transform", `translate(${margin.left},0)`).call(yAxis);
+
+        const rectGroup = chart
+          .append("g")
+          .selectAll("g")
+          .data(data)
+          .join("g")
+          .attr("transform", (d) => `translate(${xScale1(d.year) + 2},0)`)
+          .attr("class", "hi");
+
+        rectGroup
+          .selectAll("rect")
+          .data((d) => data.filter((datum) => datum.year === d.year))
+          .join("rect")
+          .attr("x", (d) => xScale2(d.name))
+          .attr("y", (d) => yScale(d.value))
+          .attr("width", xScale2.bandwidth())
+          .attr("height", (d) => yScale(0) - yScale(d.value))
+          .attr("fill", (d) => colorScale(d.name));
+      }
+
+      makeChart();
+      makeChart2();
+    </script>
+  </body>
+</html>
